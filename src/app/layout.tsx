@@ -1,8 +1,9 @@
+// app/layout.tsx
 import { Poppins } from 'next/font/google';
 import type { Metadata } from "next";
 import "./globals.css";
-import { ThemeProvider } from "@/providers/ThemeProvider";
 import Navbar from '@/components/shared/Navbar/Navbar';
+import StorageProvider from '@/providers/StorageProvider';
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -10,9 +11,9 @@ export const metadata: Metadata = {
 };
 
 const poppins = Poppins({
-  weight: ['400', '500', '600', '700', '800', '900'], // Valid weights for Poppins
-  subsets: ['latin'], // Valid subset
-  display: 'swap', // Optimize font loading
+  weight: ['400', '500', '600', '700', '800', '900'],
+  subsets: ['latin'],
+  display: 'swap',
 });
 
 export default function RootLayout({
@@ -21,13 +22,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <ThemeProvider>
-        <Navbar/>
-        <body className={`body-style ${poppins.className}`}>
+    <html lang="en" className={poppins.className}>
+      <StorageProvider>
+        <body className="body-style">
+          <Navbar />
           {children}
         </body>
-      </ThemeProvider>
-    </html>
+      </StorageProvider>
+      </html>
   );
 }

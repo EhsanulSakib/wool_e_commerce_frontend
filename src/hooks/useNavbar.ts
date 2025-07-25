@@ -1,14 +1,14 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { useTheme } from '@/providers/ThemeProvider';
 import { usePathname } from 'next/navigation';
+import { useThemeSwitch } from './theme/useThemeSwitcher';
 
 export function useNavbar() {
-  const { theme, toggleTheme } = useTheme();
+  const { theme, toggleTheme } = useThemeSwitch();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openDropdowns, setOpenDropdowns] = useState<{ [key: number]: boolean }>({});
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [isSearchExpanded, setIsSearchExpanded] = useState(false)
+  const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const pathname = usePathname();
 
   // Close mobile menu, dropdowns, and cart on resize to large screen
@@ -24,6 +24,7 @@ export function useNavbar() {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
   // Close menus on route change
   useEffect(() => {
     setIsMenuOpen(false);

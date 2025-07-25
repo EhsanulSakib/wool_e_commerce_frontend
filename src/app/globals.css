@@ -1,35 +1,68 @@
+/* app/globals.css */
 @import "tailwindcss";
 
 :root {
+  --primary: #0056d6;
   --background: #ffffff;
   --foreground: #171717;
+  --font-poppins: "Poppins", sans-serif;
 }
 
 @theme inline {
+  --color-primary: var(--primary);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-poppins);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  /* Default theme (light) */
+  :root,
+  [data-theme="light"] {
+    --color-primary: var(--primary);
+    --color-background: var(--background);
+    --color-foreground: var(--foreground)
+  }
+
+  /* Dark theme */
+  [data-theme="dark"] {
+    --color-primary: var(--primary)
+    --color-background: var(--foreground);
+    --color-foreground: var(--background);
   }
 }
-
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-
-body {
-  @apply bg-background text-foreground min-h-screen w-full max-w-[1920px] mx-auto;
+  @apply bg-background text-foreground min-h-screen w-full max-w-[1920px] mx-auto font-sans;
 }
 
 .dark body {
-  @apply bg-foreground text-background min-h-screen w-full max-w-[1920px] mx-auto;
+  @apply bg-foreground text-background;
+}
+
+h1{
+  @apply text-3xl/[1.2] md:text-4xl/[1.2] lg:text-5xl/[1.2] xl:text-6xl/[1.2] 2xl:text-7xl/[1.2] font-semibold;
+}
+
+h2{
+  @apply text-2xl/[1.2] md:text-3xl/[1.2] lg:text-4xl/[1.2] xl:text-5xl/[1.2] 2xl:text-6xl/[1.2];
+}
+
+h3{
+  @apply text-xl/[1.2] md:text-2xl/[1.2] lg:text-3xl/[1.2] xl:text-4xl/[1.2] 2xl:text-5xl/[1.2];
+}
+
+h4{
+  @apply text-lg/[1.2] md:text-xl/[1.2] lg:text-2xl/[1.2] xl:text-3xl/[1.2] 2xl:text-4xl/[1.2];
+}
+
+h5{
+  @apply text-base/[1.2] md:text-lg/[1.2] lg:text-xl/[1.2] xl:text-2xl/[1.2] 2xl:text-3xl/[1.2];
+}
+
+h6{
+  @apply text-sm/[1.2] md:text-base/[1.2] lg:text-lg/[1.2] xl:text-xl/[1.2] 2xl:text-2xl/[1.2];
+}
+
+p{
+  @apply text-xs/[1.2] md:text-sm/[1.2] lg:text-base/[1.2] xl:text-lg/[1.2] 2xl:text-xl/[1.2];
 }
