@@ -10,7 +10,7 @@ const PrimaryButton = ({
   title,
   type = 'button',
   variant = 'primary',
-  size = 'md',
+  size = 'lg',
   style = '',
   onClick,
   href,
@@ -82,8 +82,8 @@ const PrimaryButton = ({
       onClick={handleClick}
       disabled={disabled || isLoading}
       className={`
-        flex items-center justify-center rounded-lg font-medium
-        transition-all duration-200
+        flex items-center justify-center rounded-full font-medium
+        transition-all duration-200 ease-in-out
         ${variantStyles[variant][currentTheme]}
         ${sizeStyles[size]}
         ${disabled ? 'opacity-50 cursor-not-allowed' : ''}

@@ -66,3 +66,4 @@ h6{
 p{
   @apply text-xs/[1.2] md:text-sm/[1.2] lg:text-base/[1.2] xl:text-lg/[1.2] 2xl:text-xl/[1.2];
 }
+
