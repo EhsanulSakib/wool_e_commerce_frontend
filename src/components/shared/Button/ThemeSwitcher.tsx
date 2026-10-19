@@ -1,18 +1,25 @@
 'use client';
 
-import { useThemeSwitch } from '@/hooks/theme/useThemeSwitcher';
-import { MdLightMode, MdDarkMode } from 'react-icons/md';
+import { useTheme } from 'next-themes';
+import { MdDarkMode, MdLightMode } from 'react-icons/md';
 
+/**
+ * Both icons are rendered and CSS shows the right one (`dark:` variant), so
+ * the server HTML is correct before JavaScript runs and there's no hydration
+ * mismatch or icon flicker.
+ */
 export default function ThemeSwitcher() {
-  const { theme, toggleTheme } = useThemeSwitch();
+  const { resolvedTheme, setTheme } = useTheme();
 
   return (
     <button
-      onClick={toggleTheme}
-      className="text-2xl transition-colors duration-200 cursor-pointer"
-      aria-label="Toggle theme"
+      type="button"
+      onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
+      className="cursor-pointer text-2xl transition-colors duration-200"
+      aria-label="Toggle dark mode"
     >
-      {theme === 'light' ? <MdDarkMode /> : <MdLightMode />}
+      <MdDarkMode className="dark:hidden" aria-hidden="true" />
+      <MdLightMode className="hidden dark:block" aria-hidden="true" />
     </button>
   );
 }

@@ -1,69 +1,67 @@
-/* app/globals.css */
-@import "tailwindcss";
+@import 'tailwindcss';
+
+/*
+ * Theme switching: next-themes sets data-theme="light" | "dark" on <html>.
+ * Colors are CSS variables that change with the theme, so components use the
+ * same classes in both themes (bg-background, text-foreground…) and never
+ * check the theme in JavaScript. The full design-token system comes in
+ * module 05; this is the minimal version.
+ */
+
+/* Make Tailwind's `dark:` variant follow data-theme instead of the OS setting. */
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
 
 :root {
-  --primary: #0056d6;
   --background: #ffffff;
   --foreground: #171717;
-  --font-poppins: "Poppins", sans-serif;
+  --primary: #0056d6;
+  color-scheme: light;
+}
+
+[data-theme='dark'] {
+  --background: #171717;
+  --foreground: #ffffff;
+  color-scheme: dark;
 }
 
 @theme inline {
-  --color-primary: var(--primary);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-poppins);
+  --color-primary: var(--primary);
+  --font-sans: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
 }
 
 @layer base {
-  /* Default theme (light) */
-  :root,
-  [data-theme="light"] {
-    --color-primary: var(--primary);
-    --color-background: var(--background);
-    --color-foreground: var(--foreground)
+  body {
+    @apply mx-auto min-h-screen w-full max-w-[1920px] bg-background font-sans text-foreground antialiased;
   }
 
-  /* Dark theme */
-  [data-theme="dark"] {
-    --color-primary: var(--primary)
-    --color-background: var(--foreground);
-    --color-foreground: var(--background);
+  /* Temporary type scale, replaced by fluid typography tokens in module 05. */
+  h1 {
+    @apply text-3xl/[1.2] font-semibold md:text-4xl/[1.2] lg:text-5xl/[1.2] xl:text-6xl/[1.2] 2xl:text-7xl/[1.2];
+  }
+
+  h2 {
+    @apply text-2xl/[1.2] md:text-3xl/[1.2] lg:text-4xl/[1.2] xl:text-5xl/[1.2] 2xl:text-6xl/[1.2];
+  }
+
+  h3 {
+    @apply text-xl/[1.2] md:text-2xl/[1.2] lg:text-3xl/[1.2] xl:text-4xl/[1.2] 2xl:text-5xl/[1.2];
+  }
+
+  h4 {
+    @apply text-lg/[1.2] md:text-xl/[1.2] lg:text-2xl/[1.2] xl:text-3xl/[1.2] 2xl:text-4xl/[1.2];
+  }
+
+  h5 {
+    @apply text-base/[1.2] md:text-lg/[1.2] lg:text-xl/[1.2] xl:text-2xl/[1.2] 2xl:text-3xl/[1.2];
+  }
+
+  h6 {
+    @apply text-sm/[1.2] md:text-base/[1.2] lg:text-lg/[1.2] xl:text-xl/[1.2] 2xl:text-2xl/[1.2];
+  }
+
+  p {
+    @apply text-base/[1.5] xl:text-lg/[1.5] 2xl:text-xl/[1.5];
   }
 }
-body {
-  @apply bg-background text-foreground min-h-screen w-full max-w-[1920px] mx-auto font-sans;
-}
-
-.dark body {
-  @apply bg-foreground text-background;
-}
-
-h1{
-  @apply text-3xl/[1.2] md:text-4xl/[1.2] lg:text-5xl/[1.2] xl:text-6xl/[1.2] 2xl:text-7xl/[1.2] font-semibold;
-}
-
-h2{
-  @apply text-2xl/[1.2] md:text-3xl/[1.2] lg:text-4xl/[1.2] xl:text-5xl/[1.2] 2xl:text-6xl/[1.2];
-}
-
-h3{
-  @apply text-xl/[1.2] md:text-2xl/[1.2] lg:text-3xl/[1.2] xl:text-4xl/[1.2] 2xl:text-5xl/[1.2];
-}
-
-h4{
-  @apply text-lg/[1.2] md:text-xl/[1.2] lg:text-2xl/[1.2] xl:text-3xl/[1.2] 2xl:text-4xl/[1.2];
-}
-
-h5{
-  @apply text-base/[1.2] md:text-lg/[1.2] lg:text-xl/[1.2] xl:text-2xl/[1.2] 2xl:text-3xl/[1.2];
-}
-
-h6{
-  @apply text-sm/[1.2] md:text-base/[1.2] lg:text-lg/[1.2] xl:text-xl/[1.2] 2xl:text-2xl/[1.2];
-}
-
-p{
-  @apply text-xs/[1.2] md:text-sm/[1.2] lg:text-base/[1.2] xl:text-lg/[1.2] 2xl:text-xl/[1.2];
-}
-

@@ -7,7 +7,11 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function GSAPAnimationWrapper({ children }: { children: React.ReactNode }) {
+export default function GSAPAnimationWrapper({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const sectionRef = useRef(null);
 
   useGSAP(() => {
@@ -25,9 +29,13 @@ export default function GSAPAnimationWrapper({ children }: { children: React.Rea
           end: 'top 30%',
           scrub: true,
         },
-      }
+      },
     );
   }, []);
 
-  return <section ref={sectionRef} style={{ width: '100%' }}>{children}</section>;
+  return (
+    <section ref={sectionRef} style={{ width: '100%' }}>
+      {children}
+    </section>
+  );
 }

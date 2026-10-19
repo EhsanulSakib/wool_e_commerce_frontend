@@ -1,15 +1,23 @@
-'use client'; // Client-side component
+'use client';
 
-import { ReactLenis } from 'lenis/react'; // Updated import for lenis package
+import { ReactLenis } from 'lenis/react';
 
-export default function SmoothScrolling({ children }: { children: React.ReactNode }) {
+/**
+ * Smooth wheel scrolling on desktop. Touch devices keep native scrolling
+ * (`syncTouch: false`), which feels better and avoids lag on phones.
+ * Module 07 connects Lenis to GSAP's ticker for scroll animations.
+ */
+export default function SmoothScrolling({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <ReactLenis
       root
       options={{
-        lerp: 0.1, // Smoothness factor (0 to 1, lower is smoother)
-        duration: 1.5, // Animation duration
-        syncTouch: true, // Enable smooth scrolling on touch devices
+        lerp: 0.1, // smoothing factor: lower = smoother but floatier
+        syncTouch: false,
       }}
     >
       {children}

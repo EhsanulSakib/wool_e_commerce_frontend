@@ -1,10 +1,32 @@
 'use client';
-import { useRouter } from 'next/navigation';
-import React from 'react';
-import { useSelector } from 'react-redux';
-import { FiLoader } from 'react-icons/fi';
-import { RootState } from '@/store/store';
 import { PrimaryButtonProps } from '@/types/button.types';
+import { useRouter } from 'next/navigation';
+import { FiLoader } from 'react-icons/fi';
+
+// Temporary button; replaced by the Button component in module 06.
+// Colors use theme tokens, so the same classes work in light and dark mode.
+const variantStyles = {
+  primary:
+    'bg-foreground text-background hover:bg-foreground/90 focus:ring-2 focus:ring-foreground/60',
+  secondary:
+    'bg-foreground/15 text-foreground hover:bg-foreground/25 focus:ring-2 focus:ring-foreground/60',
+  outline:
+    'bg-transparent border border-foreground text-foreground hover:bg-foreground/10 focus:ring-2 focus:ring-foreground/60',
+  ghost:
+    'bg-transparent text-foreground hover:bg-foreground/10 focus:ring-2 focus:ring-foreground/60',
+};
+
+const sizeStyles = {
+  sm: 'px-3 py-1.5 text-sm',
+  md: 'px-4 py-2 text-base',
+  lg: 'px-6 py-3 text-lg',
+};
+
+const iconSizes = {
+  sm: 'text-lg',
+  md: 'text-xl',
+  lg: 'text-2xl',
+};
 
 const PrimaryButton = ({
   title,
@@ -20,42 +42,7 @@ const PrimaryButton = ({
   iconRight: IconRight,
   ariaLabel,
 }: PrimaryButtonProps) => {
-  const currentTheme = useSelector((state: RootState) => state.theme.theme);
   const router = useRouter();
-
-  // Base styles for different variants
-  const variantStyles = {
-    primary: {
-      light: 'bg-foreground/80 text-background/80 hover:bg-foreground focus:ring-2 focus:ring-foreground/60',
-      dark: 'bg-background/80 text-foreground/80 hover:bg-background focus:ring-2 focus:ring-background/60',
-    },
-    secondary: {
-      light: 'bg-foreground/30 text-foreground/80 hover:bg-foreground/50 focus:ring-2 focus:ring-foreground/60',
-      dark: 'bg-background/30 text-background/80 hover:bg-background/50 focus:ring-2 focus:ring-background/60',
-    },
-    outline: {
-      light: 'bg-transparent border border-foreground/80 text-foreground/80 hover:bg-foreground/20 focus:ring-2 focus:ring-foreground/60',
-      dark: 'bg-transparent border border-background/80 text-background/80 hover:bg-background/20 focus:ring-2 focus:ring-background/60',
-    },
-    ghost: {
-      light: 'bg-transparent text-foreground/80 hover:bg-foreground/20 focus:ring-2 focus:ring-foreground/60',
-      dark: 'bg-transparent text-background/80 hover:bg-background/20 focus:ring-2 focus:ring-background/60',
-    },
-  };
-
-  // Size styles
-  const sizeStyles = {
-    sm: 'px-3 py-1.5 text-sm',
-    md: 'px-4 py-2 text-base',
-    lg: 'px-6 py-3 text-lg',
-  };
-
-  // Icon sizes
-  const iconSizes = {
-    sm: 'text-lg',
-    md: 'text-xl',
-    lg: 'text-2xl',
-  };
 
   const handleClick = () => {
     if (disabled || isLoading) return;
@@ -67,33 +54,23 @@ const PrimaryButton = ({
     }
   };
 
-  const buttonContent = (
-    <>
-      {isLoading && <FiLoader className={`animate-spin mr-2 ${iconSizes[size]}`} />}
-      {IconLeft && !isLoading && <IconLeft className={`mr-2 ${iconSizes[size]}`} />}
-      <span>{title}</span>
-      {IconRight && <IconRight className={`ml-2 ${iconSizes[size]}`} />}
-    </>
-  );
-
   return (
     <button
       type={type}
       onClick={handleClick}
       disabled={disabled || isLoading}
-      className={`
-        flex items-center justify-center rounded-full font-medium
-        transition-all duration-200 ease-in-out
-        ${variantStyles[variant][currentTheme]}
-        ${sizeStyles[size]}
-        ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
-        ${isLoading ? 'cursor-wait' : ''}
-        ${style}
-      `}
+      className={`flex items-center justify-center rounded-full font-medium transition-all duration-200 ease-in-out ${variantStyles[variant]} ${sizeStyles[size]} ${disabled ? 'cursor-not-allowed opacity-50' : ''} ${isLoading ? 'cursor-wait' : ''} ${style}`}
       aria-label={ariaLabel || title}
       aria-disabled={disabled}
     >
-      {buttonContent}
+      {isLoading && (
+        <FiLoader className={`mr-2 animate-spin ${iconSizes[size]}`} />
+      )}
+      {IconLeft && !isLoading && (
+        <IconLeft className={`mr-2 ${iconSizes[size]}`} />
+      )}
+      <span>{title}</span>
+      {IconRight && <IconRight className={`ml-2 ${iconSizes[size]}`} />}
     </button>
   );
 };

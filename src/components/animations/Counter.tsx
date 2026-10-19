@@ -1,66 +1,44 @@
 'use client';
-import React, { useState, useEffect } from "react";
+import { useEffect, useState } from 'react';
+
+// Temporary counter; replaced by the CountUp motion component in module 07.
 
 interface CounterProps {
   targetValue: number | string;
   duration?: number;
 }
 
-const Counter: React.FC<CounterProps> = ({ targetValue, duration = 2000 }) => {
-  const [count, setCount] = useState<number>(0);
-  const [suffix, setSuffix] = useState<string>("");
+/** "30,000+" → { end: 30000, suffix: "+" } */
+function parseTarget(targetValue: number | string) {
+  if (typeof targetValue === 'number') return { end: targetValue, suffix: '' };
+  const match = targetValue.replace(/,/g, '').match(/^(\d+)(.*)$/);
+  return match
+    ? { end: Number(match[1]), suffix: match[2] ?? '' }
+    : { end: 0, suffix: '' };
+}
+
+const Counter = ({ targetValue, duration = 2000 }: CounterProps) => {
+  const { end, suffix } = parseTarget(targetValue);
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
-    let end: number;
-    let displaySuffix: string = "";
+    if (end === 0) return;
 
-    // Parse targetValue
-    if (typeof targetValue === "string") {
-      // Remove commas and split on non-numeric characters to separate number and suffix
-      const cleanValue = targetValue.replace(/,/g, "");
-      const splitValue = cleanValue.split(/(\d+)/).filter(Boolean);
-      end = parseInt(splitValue[0]);
-      displaySuffix = splitValue[1] || ""; // Capture suffix like "+" or empty string
-    } else {
-      end = parseInt(targetValue.toString());
-      displaySuffix = "";
-    }
-
-    if (end === 0) {
-      setCount(0);
-      setSuffix(displaySuffix);
-      return;
-    }
-
-    // Calculate increment steps
-    const incrementTime = Math.max(16, duration / end); // Ensure at least 16ms per frame (~60fps)
-    let current = 0;
-
+    const startedAt = performance.now();
     const timer = setInterval(() => {
-      current += 1;
-      const progress = Math.min(current / (duration / incrementTime), 1); // Normalize progress
-      const nextValue = Math.round(progress * end);
-      setCount(nextValue);
-      setSuffix(displaySuffix);
-
-      if (progress >= 1) {
-        // Ensure exact end value with proper formatting
-        const formattedValue = typeof targetValue === "string"
-          ? parseInt(targetValue.replace(/,/g, "")).toLocaleString()
-          : end.toLocaleString();
-        setCount(parseInt(formattedValue.replace(/,/g, "")));
-        setSuffix(displaySuffix);
-        clearInterval(timer);
-      }
-    }, incrementTime);
+      const progress = Math.min((performance.now() - startedAt) / duration, 1);
+      setCount(Math.round(progress * end));
+      if (progress >= 1) clearInterval(timer);
+    }, 16);
 
     return () => clearInterval(timer);
-  }, [targetValue, duration]);
+  }, [end, duration]);
 
   return (
-    <h3 className="font-semibold">
-      {count.toLocaleString()}{suffix}
-    </h3>
+    <span className="block text-xl font-semibold md:text-2xl lg:text-3xl xl:text-4xl">
+      {count.toLocaleString()}
+      {suffix}
+    </span>
   );
 };
 
