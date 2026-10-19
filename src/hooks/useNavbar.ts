@@ -1,39 +1,54 @@
 'use client';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import {
+  closeAllOverlays,
+  closeMobileMenu,
+  closeSearch,
+  selectIsCartDrawerOpen,
+  selectIsMobileMenuOpen,
+  selectIsSearchOpen,
+  toggleCartDrawer,
+  toggleMobileMenu,
+  toggleSearch,
+} from '@/store/slices/uiSlice';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
+/**
+ * Navbar state. The cart drawer, mobile menu and search live in Redux (other
+ * components will open the cart drawer later); dropdowns are only used here,
+ * so they stay local state.
+ */
 export function useNavbar() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const dispatch = useAppDispatch();
+  const isMenuOpen = useAppSelector(selectIsMobileMenuOpen);
+  const isCartOpen = useAppSelector(selectIsCartDrawerOpen);
+  const isSearchExpanded = useAppSelector(selectIsSearchOpen);
   const [openDropdowns, setOpenDropdowns] = useState<{
     [key: number]: boolean;
   }>({});
-  const [isCartOpen, setIsCartOpen] = useState(false);
-  const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const pathname = usePathname();
 
-  // Close mobile menu, dropdowns, and cart on resize to large screen
+  // Close overlays when resizing to a large screen
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 1024) {
-        setIsMenuOpen(false);
-        setOpenDropdowns({});
-        setIsCartOpen(false);
-        setIsSearchExpanded(false);
-      }
+      if (window.innerWidth >= 1024) dispatch(closeAllOverlays());
     };
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [dispatch]);
 
-  // Close menus on route change. (Adjusting state while rendering, the React
-  // pattern for "reset when a value changes", instead of an effect.)
+  // Close overlays on route change
+  useEffect(() => {
+    dispatch(closeAllOverlays());
+  }, [pathname, dispatch]);
+
+  // Reset dropdowns on route change (adjusting local state while rendering,
+  // the React pattern for "reset when a value changes")
   const [lastPathname, setLastPathname] = useState(pathname);
   if (pathname !== lastPathname) {
     setLastPathname(pathname);
-    setIsMenuOpen(false);
     setOpenDropdowns({});
-    setIsCartOpen(false);
-    setIsSearchExpanded(false);
   }
 
   // Determine if a link is active
@@ -43,30 +58,26 @@ export function useNavbar() {
       : pathname === url || pathname.startsWith(url);
   };
 
-  const toggleMenu = () => setIsMenuOpen((prev) => !prev);
-  const closeMenu = () => setIsMenuOpen(false);
   const toggleDropdown = (index: number) =>
     setOpenDropdowns((prev) => ({ ...prev, [index]: !prev[index] }));
   const openDropdown = (index: number) =>
     setOpenDropdowns((prev) => ({ ...prev, [index]: true }));
   const closeDropdown = (index: number) =>
     setOpenDropdowns((prev) => ({ ...prev, [index]: false }));
-  const toggleCart = () => setIsCartOpen((prev) => !prev);
-  const toggleSearch = () => setIsSearchExpanded((prev) => !prev);
 
   return {
     isMenuOpen,
     openDropdowns,
     isCartOpen,
     isSearchExpanded,
-    setIsSearchExpanded,
+    closeSearch: () => dispatch(closeSearch()),
     isActiveLink,
-    toggleMenu,
-    closeMenu,
+    toggleMenu: () => dispatch(toggleMobileMenu()),
+    closeMenu: () => dispatch(closeMobileMenu()),
     toggleDropdown,
     openDropdown,
     closeDropdown,
-    toggleCart,
-    toggleSearch,
+    toggleCart: () => dispatch(toggleCartDrawer()),
+    toggleSearch: () => dispatch(toggleSearch()),
   };
 }

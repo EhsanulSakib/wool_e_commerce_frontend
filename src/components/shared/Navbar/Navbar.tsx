@@ -26,7 +26,7 @@ export default function Navbar() {
     openDropdowns,
     isCartOpen,
     isSearchExpanded,
-    setIsSearchExpanded,
+    closeSearch,
     isActiveLink,
     toggleMenu,
     closeMenu,
@@ -168,9 +168,7 @@ export default function Navbar() {
                   className={`rounded-full border border-foreground/40 bg-background/40 py-2 pr-4 pl-10 text-foreground transition-all duration-300 focus:ring-2 focus:ring-foreground focus:outline-none ${
                     isSearchExpanded ? 'w-80' : 'w-56'
                   }`}
-                  onBlur={() =>
-                    setTimeout(() => setIsSearchExpanded(false), 200)
-                  }
+                  onBlur={() => setTimeout(closeSearch, 200)}
                 />
               </div>
             </div>

@@ -3,6 +3,7 @@ import { Poppins } from 'next/font/google';
 import Navbar from '@/components/shared/Navbar/Navbar';
 import { publicEnv } from '@/lib/env';
 import SmoothScrolling from '@/providers/SmoothScrolling';
+import StoreProvider from '@/providers/StoreProvider';
 import ThemeProvider from '@/providers/ThemeProvider';
 import './globals.css';
 
@@ -34,10 +35,12 @@ export default function RootLayout({
     <html lang="en" className={poppins.variable} suppressHydrationWarning>
       <body>
         <ThemeProvider>
-          <SmoothScrolling>
-            <Navbar />
-            {children}
-          </SmoothScrolling>
+          <StoreProvider>
+            <SmoothScrolling>
+              <Navbar />
+              {children}
+            </SmoothScrolling>
+          </StoreProvider>
         </ThemeProvider>
       </body>
     </html>

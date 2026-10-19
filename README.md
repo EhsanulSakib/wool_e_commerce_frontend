@@ -36,6 +36,12 @@ npm run dev                  # http://localhost:3000
 
 `next-themes` sets `data-theme="light" | "dark"` on `<html>` before the page paints (no flash) and remembers the choice. Colors are CSS variables in `src/app/globals.css` that change with the theme, so components use the same classes in both themes (`bg-background`, `text-foreground`, `dark:hidden`…) and **never check the theme in JavaScript**.
 
+## State and data
+
+- **Data fetching:** Next.js's built-in `fetch`. Server Components fetch on the server (cached with tags, refreshed on demand); client components call the API from Redux thunks (module 14 adds the typed `fetch` wrapper).
+- **Client state:** Redux Toolkit. `src/store/store.ts` creates a new store per request (`makeStore`), never a global one, so server-rendered requests from different users can't share state. `StoreProvider` creates it once in the browser, and components use the typed hooks from `src/store/hooks.ts` (`useAppSelector`, `useAppDispatch`).
+- **What goes in Redux:** state several components share (cart drawer and menus now; current user, cart and wishlist later). State used by one component stays in `useState`. The theme is handled by `next-themes`, not Redux.
+
 ## Folder structure
 
 ```
@@ -51,7 +57,8 @@ src/
 ├─ features/       # per-feature logic: hooks, stores, API calls
 ├─ hooks/          # shared hooks
 ├─ lib/            # utilities, env validation
-├─ providers/      # theme and smooth-scrolling providers
+├─ providers/      # theme, Redux store and smooth-scrolling providers
+├─ store/          # Redux: makeStore, typed hooks, slices
 ├─ styles/         # design tokens (module 05)
 └─ types/
 ```
