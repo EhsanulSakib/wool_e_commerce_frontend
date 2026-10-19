@@ -16,7 +16,7 @@ import { navLinks } from './navLinks';
 
 /*
  * Temporary navbar, rebuilt on the new UI kit in module 09.
- * Colors use theme tokens (text-foreground, bg-background…) that switch with
+ * Colors use theme tokens (text-fg, bg-bg…) that switch with
  * data-theme, so there are no theme checks in JavaScript. Links to pages
  * that don't exist yet use prefetch={false} to avoid 404 requests.
  */
@@ -78,10 +78,8 @@ export default function Navbar() {
                     <Link
                       href={item.url}
                       prefetch={item.url === '/' ? undefined : false}
-                      className={`text-lg transition-colors duration-200 hover:text-foreground ${
-                        isActive
-                          ? 'font-medium text-foreground'
-                          : 'text-foreground/70'
+                      className={`text-lg transition-colors duration-200 hover:text-fg ${
+                        isActive ? 'font-medium text-fg' : 'text-fg/70'
                       }`}
                       aria-current={isActive ? 'page' : undefined}
                     >
@@ -90,10 +88,8 @@ export default function Navbar() {
                   ) : (
                     <>
                       <button
-                        className={`flex cursor-pointer items-center gap-1 text-lg transition-colors duration-200 hover:text-foreground ${
-                          isActive
-                            ? 'font-medium text-foreground'
-                            : 'text-foreground/70'
+                        className={`flex cursor-pointer items-center gap-1 text-lg transition-colors duration-200 hover:text-fg ${
+                          isActive ? 'font-medium text-fg' : 'text-fg/70'
                         }`}
                         onMouseEnter={() => openDropdown(index)}
                         onMouseLeave={() => closeDropdown(index)}
@@ -103,7 +99,7 @@ export default function Navbar() {
                         <FiChevronDown className="text-lg" aria-hidden="true" />
                       </button>
                       <div
-                        className={`absolute top-full left-1/2 mt-1 w-64 -translate-x-1/2 transform rounded-lg border border-foreground/10 bg-background shadow-lg transition-all duration-300 ease-in-out ${
+                        className={`absolute top-full left-1/2 mt-1 w-64 -translate-x-1/2 transform rounded-lg border border-fg/10 bg-bg shadow-lg transition-all duration-300 ease-in-out ${
                           openDropdowns[index]
                             ? 'scale-100 opacity-100'
                             : 'pointer-events-none invisible scale-95 opacity-0'
@@ -117,15 +113,15 @@ export default function Navbar() {
                               key={subItem.title}
                               href={subItem.url}
                               prefetch={false}
-                              className={`text-lg hover:text-foreground ${
+                              className={`text-lg hover:text-fg ${
                                 isActiveLink(subItem.url)
-                                  ? 'font-medium text-foreground underline'
-                                  : 'text-foreground/80'
+                                  ? 'font-medium text-fg underline'
+                                  : 'text-fg/80'
                               }`}
                               onClick={closeMenu}
                             >
                               <span>{subItem.title}</span>
-                              <span className="block text-sm text-foreground/70">
+                              <span className="block text-sm text-fg/70">
                                 {subItem.des}
                               </span>
                             </Link>
@@ -158,14 +154,14 @@ export default function Navbar() {
             >
               <div className="relative">
                 <FiSearch
-                  className="absolute top-1/2 left-3 -translate-y-1/2 transform text-foreground/70"
+                  className="absolute top-1/2 left-3 -translate-y-1/2 transform text-fg/70"
                   aria-hidden="true"
                 />
                 <input
                   type="search"
                   placeholder="Search"
                   aria-label="Search products"
-                  className={`rounded-full border border-foreground/40 bg-background/40 py-2 pr-4 pl-10 text-foreground transition-all duration-300 focus:ring-2 focus:ring-foreground focus:outline-none ${
+                  className={`rounded-full border border-fg/40 bg-bg/40 py-2 pr-4 pl-10 text-fg transition-all duration-300 ${
                     isSearchExpanded ? 'w-80' : 'w-56'
                   }`}
                   onBlur={() => setTimeout(closeSearch, 200)}
@@ -178,7 +174,7 @@ export default function Navbar() {
           <Link
             href="/favorites"
             prefetch={false}
-            className="relative text-2xl text-foreground transition-colors duration-200 hover:text-foreground/80"
+            className="relative text-2xl text-fg transition-colors duration-200 hover:text-fg/80"
             aria-label="Favorites"
             aria-current={isActiveLink('/favorites') ? 'page' : undefined}
           >
@@ -187,12 +183,12 @@ export default function Navbar() {
 
           {/* Cart */}
           <button
-            className="relative cursor-pointer text-2xl text-foreground transition-colors duration-200 hover:text-foreground/80"
+            className="relative cursor-pointer text-2xl text-fg transition-colors duration-200 hover:text-fg/80"
             onClick={toggleCart}
             aria-label="Open cart, 3 items"
           >
             <FiShoppingCart aria-hidden="true" />
-            <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-xs text-white">
+            <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-danger text-caption text-bg">
               3
             </span>
           </button>
@@ -206,8 +202,8 @@ export default function Navbar() {
             prefetch={false}
             className={`rounded-lg px-4 py-2 text-lg transition-all duration-300 ${
               isActiveLink('/signup')
-                ? 'bg-foreground text-background'
-                : 'bg-foreground/90 text-background hover:bg-foreground'
+                ? 'bg-fg text-bg'
+                : 'bg-fg/90 text-bg hover:bg-fg'
             }`}
             aria-current={isActiveLink('/signup') ? 'page' : undefined}
           >
@@ -218,7 +214,7 @@ export default function Navbar() {
 
       {/* Mobile Menu (sm, md) */}
       <div
-        className={`border-t border-foreground/20 bg-background transition-all duration-300 ease-in-out lg:hidden ${
+        className={`border-t border-fg/20 bg-bg transition-all duration-300 ease-in-out lg:hidden ${
           isMenuOpen
             ? 'max-h-screen opacity-100'
             : 'max-h-0 overflow-hidden opacity-0'
@@ -232,8 +228,8 @@ export default function Navbar() {
               <div key={index} className="flex flex-col">
                 <div
                   className={`flex items-center justify-between text-lg ${
-                    isActive ? 'font-bold' : 'text-foreground/80'
-                  } transition-colors duration-200 hover:text-foreground`}
+                    isActive ? 'font-bold' : 'text-fg/80'
+                  } transition-colors duration-200 hover:text-fg`}
                   onClick={item.items ? () => toggleDropdown(index) : closeMenu}
                 >
                   <Link
@@ -264,7 +260,7 @@ export default function Navbar() {
                         className={`text-lg ${
                           isActiveLink(subItem.url)
                             ? 'font-bold underline'
-                            : 'text-foreground/80 hover:text-foreground'
+                            : 'text-fg/80 hover:text-fg'
                         }`}
                         onClick={closeMenu}
                       >
@@ -282,7 +278,7 @@ export default function Navbar() {
             className={`text-lg ${
               isActiveLink('/signup')
                 ? 'font-bold underline'
-                : 'text-foreground/80 hover:text-foreground'
+                : 'text-fg/80 hover:text-fg'
             }`}
             onClick={closeMenu}
             aria-current={isActiveLink('/signup') ? 'page' : undefined}
@@ -294,7 +290,7 @@ export default function Navbar() {
 
       {/* Cart Drawer (mock content until module 30) */}
       <div
-        className={`fixed top-0 right-0 z-50 h-full w-80 transform bg-background shadow-lg transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 right-0 z-modal h-full w-80 transform bg-bg shadow-lg transition-transform duration-300 ease-in-out ${
           isCartOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
         // inert: when closed, hidden from screen readers AND not focusable
@@ -317,14 +313,14 @@ export default function Navbar() {
               { name: 'Another Product', price: '$49.99' },
             ].map((item) => (
               <div key={item.name} className="flex items-center gap-2">
-                <div className="h-12 w-12 rounded bg-foreground/10" />
+                <div className="h-12 w-12 rounded bg-fg/10" />
                 <div>
                   <p className="font-semibold">{item.name}</p>
-                  <p className="text-sm text-foreground/70">{item.price}</p>
+                  <p className="text-sm text-fg/70">{item.price}</p>
                 </div>
               </div>
             ))}
-            <button className="mt-4 rounded-lg bg-foreground px-4 py-2 text-background hover:bg-foreground/90">
+            <button className="mt-4 rounded-lg bg-fg px-4 py-2 text-bg hover:bg-fg/90">
               Checkout
             </button>
           </div>
@@ -332,7 +328,10 @@ export default function Navbar() {
       </div>
       {/* Overlay for cart drawer */}
       {isCartOpen && (
-        <div className="fixed inset-0 z-40 bg-black/50" onClick={toggleCart} />
+        <div
+          className="fixed inset-0 z-overlay bg-overlay"
+          onClick={toggleCart}
+        />
       )}
     </div>
   );

@@ -6,14 +6,10 @@ import { FiLoader } from 'react-icons/fi';
 // Temporary button; replaced by the Button component in module 06.
 // Colors use theme tokens, so the same classes work in light and dark mode.
 const variantStyles = {
-  primary:
-    'bg-foreground text-background hover:bg-foreground/90 focus:ring-2 focus:ring-foreground/60',
-  secondary:
-    'bg-foreground/15 text-foreground hover:bg-foreground/25 focus:ring-2 focus:ring-foreground/60',
-  outline:
-    'bg-transparent border border-foreground text-foreground hover:bg-foreground/10 focus:ring-2 focus:ring-foreground/60',
-  ghost:
-    'bg-transparent text-foreground hover:bg-foreground/10 focus:ring-2 focus:ring-foreground/60',
+  primary: 'bg-fg text-bg hover:bg-fg/90',
+  secondary: 'bg-fg/15 text-fg hover:bg-fg/25',
+  outline: 'bg-transparent border border-fg text-fg hover:bg-fg/10',
+  ghost: 'bg-transparent text-fg hover:bg-fg/10',
 };
 
 const sizeStyles = {

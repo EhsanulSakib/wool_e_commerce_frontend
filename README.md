@@ -32,9 +32,14 @@ npm run dev                  # http://localhost:3000
 | `npm test` / `test:watch`         | Vitest + Testing Library                                   |
 | `npm run analyze`                 | Interactive bundle analyzer                                |
 
-## Theming
+## Theming and design tokens
 
-`next-themes` sets `data-theme="light" | "dark"` on `<html>` before the page paints (no flash) and remembers the choice. Colors are CSS variables in `src/app/globals.css` that change with the theme, so components use the same classes in both themes (`bg-background`, `text-foreground`, `dark:hidden`…) and **never check the theme in JavaScript**.
+`next-themes` sets `data-theme="light" | "dark"` on `<html>` before the page paints (no flash) and remembers the choice. All colors, type, spacing, radius, shadows, z-index and motion values are tokens in `src/styles/tokens.css`. Semantic color tokens change with the theme, so components use the same classes in both themes (`bg-bg`, `text-fg`, `text-muted-fg`, `border-border`…) and **never check the theme in JavaScript**. Tailwind's default color palette is turned off, so only token colors exist.
+
+- Full reference: [docs/design-tokens.md](docs/design-tokens.md)
+- Live preview: `/dev/tokens` (both themes, contrast ratios) and `/dev/fonts` (font pairings); both noindex
+- Fonts: Fraunces (headings, `font-display`) + Inter (body, `font-sans`) via `next/font`
+- Motion values for JS animations: `src/styles/motion.ts` (kept in sync with the CSS by a test)
 
 ## State and data
 
@@ -59,7 +64,7 @@ src/
 ├─ lib/            # utilities, env validation
 ├─ providers/      # theme, Redux store and smooth-scrolling providers
 ├─ store/          # Redux: makeStore, typed hooks, slices
-├─ styles/         # design tokens (module 05)
+├─ styles/         # design tokens (tokens.css) and motion values (motion.ts)
 └─ types/
 ```
 

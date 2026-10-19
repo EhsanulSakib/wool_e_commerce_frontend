@@ -1,67 +1,96 @@
 @import 'tailwindcss';
+@import '../styles/tokens.css';
 
 /*
  * Theme switching: next-themes sets data-theme="light" | "dark" on <html>.
- * Colors are CSS variables that change with the theme, so components use the
- * same classes in both themes (bg-background, text-foreground…) and never
- * check the theme in JavaScript. The full design-token system comes in
- * module 05; this is the minimal version.
+ * Semantic tokens in styles/tokens.css change with it, so components use the
+ * same classes in both themes (bg-bg, text-fg, border-border…) and never
+ * check the theme in JavaScript.
  */
 
 /* Make Tailwind's `dark:` variant follow data-theme instead of the OS setting. */
 @custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --primary: #0056d6;
-  color-scheme: light;
-}
-
-[data-theme='dark'] {
-  --background: #171717;
-  --foreground: #ffffff;
-  color-scheme: dark;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-primary: var(--primary);
-  --font-sans: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
-}
-
 @layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    /* Thin, neutral scrollbar (Firefox + Chromium 121+) */
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-strong) transparent;
+  }
+
   body {
-    @apply mx-auto min-h-screen w-full max-w-[1920px] bg-background font-sans text-foreground antialiased;
+    @apply mx-auto min-h-screen w-full max-w-wide bg-bg font-sans text-body text-fg antialiased;
   }
 
-  /* Temporary type scale, replaced by fluid typography tokens in module 05. */
-  h1 {
-    @apply text-3xl/[1.2] font-semibold md:text-4xl/[1.2] lg:text-5xl/[1.2] xl:text-6xl/[1.2] 2xl:text-7xl/[1.2];
-  }
-
-  h2 {
-    @apply text-2xl/[1.2] md:text-3xl/[1.2] lg:text-4xl/[1.2] xl:text-5xl/[1.2] 2xl:text-6xl/[1.2];
-  }
-
-  h3 {
-    @apply text-xl/[1.2] md:text-2xl/[1.2] lg:text-3xl/[1.2] xl:text-4xl/[1.2] 2xl:text-5xl/[1.2];
-  }
-
-  h4 {
-    @apply text-lg/[1.2] md:text-xl/[1.2] lg:text-2xl/[1.2] xl:text-3xl/[1.2] 2xl:text-4xl/[1.2];
-  }
-
-  h5 {
-    @apply text-base/[1.2] md:text-lg/[1.2] lg:text-xl/[1.2] xl:text-2xl/[1.2] 2xl:text-3xl/[1.2];
-  }
-
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
   h6 {
-    @apply text-sm/[1.2] md:text-base/[1.2] lg:text-lg/[1.2] xl:text-xl/[1.2] 2xl:text-2xl/[1.2];
+    @apply font-display font-normal text-balance;
+  }
+
+  /* Default sizes for bare headings; components override with text-* classes. */
+  h1 {
+    @apply text-h1;
+  }
+  h2 {
+    @apply text-h2;
+  }
+  h3 {
+    @apply text-h3;
+  }
+  h4 {
+    @apply text-h4;
+  }
+  h5 {
+    @apply text-h5;
+  }
+  h6 {
+    @apply text-h6;
   }
 
   p {
-    @apply text-base/[1.5] xl:text-lg/[1.5] 2xl:text-xl/[1.5];
+    text-wrap: pretty;
+  }
+
+  /* Focus ring: visible for keyboard users only, same everywhere. */
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background-color: var(--primary);
+    color: var(--primary-fg);
+  }
+
+  /* Older Safari doesn't support scrollbar-color. */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--border-strong);
+    border: 3px solid var(--bg);
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+/* Reduced motion: CSS transitions and animations become near-instant. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

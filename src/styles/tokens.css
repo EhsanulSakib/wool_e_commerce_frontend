@@ -1,0 +1,338 @@
+/*
+ * Design tokens. Every visual decision lives here, once.
+ *
+ * 1. Primitives (--ink, --neutral-500, --red-600…): raw values. Never used
+ *    by components directly; they exist so the semantic layer has a palette.
+ * 2. Semantic tokens (--bg, --fg, --muted-fg, --danger…): what a color is
+ *    FOR. They change with data-theme, so dark mode is just a token swap.
+ * 3. @theme: exposes the semantic tokens as Tailwind utilities
+ *    (bg-surface, text-muted-fg, border-border, text-h1, ease-standard…).
+ *
+ * Tailwind's default color palette is switched off (--color-*: initial), so a
+ * component can't reach for bg-red-600 or text-gray-500 by accident.
+ * Reference: docs/design-tokens.md. Contrast is checked in tokens.test.ts.
+ */
+
+/* ------------------------------------------------------------------ */
+/* 1. Primitives                                                       */
+/* ------------------------------------------------------------------ */
+
+:root {
+  --ink: #0a0a0a;
+  --paper: #ffffff;
+
+  /* Neutral gray with a hint of warmth (wool, not steel). */
+  --neutral-50: #fafaf9;
+  --neutral-100: #f4f4f3;
+  --neutral-200: #e7e6e4;
+  --neutral-300: #d6d4d1;
+  --neutral-400: #a8a5a0;
+  --neutral-500: #78756f;
+  --neutral-600: #5c5954;
+  --neutral-700: #45433f;
+  --neutral-800: #2b2a27;
+  --neutral-900: #1c1b19;
+  --neutral-950: #121110;
+
+  /* Status hues: small accents only (badges, pills, dots, alerts). */
+  --green-100: #dcfce7;
+  --green-300: #86efac;
+  --green-400: #4ade80;
+  --green-700: #15803d;
+  --green-900: #14532d;
+  --green-950: #052e16;
+
+  --amber-100: #fef3c7;
+  --amber-300: #fcd34d;
+  --amber-400: #fbbf24;
+  --amber-700: #b45309;
+  --amber-900: #78350f;
+  --amber-950: #451a03;
+
+  --red-100: #fee2e2;
+  --red-300: #fca5a5;
+  --red-400: #f87171;
+  --red-600: #dc2626;
+  --red-800: #991b1b;
+  --red-950: #450a0a;
+
+  --blue-100: #dbeafe;
+  --blue-300: #93c5fd;
+  --blue-400: #60a5fa;
+  --blue-600: #2563eb;
+  --blue-900: #1e3a8a;
+  --blue-950: #172554;
+}
+
+/* ------------------------------------------------------------------ */
+/* 2. Semantic tokens                                                  */
+/* ------------------------------------------------------------------ */
+
+/* Light is the default (also before next-themes sets data-theme). */
+:root,
+[data-theme='light'] {
+  color-scheme: light;
+
+  --bg: var(--paper); /* page background */
+  --fg: var(--ink); /* main text */
+  --surface: var(--neutral-50); /* cards, sections that sit on bg */
+  --surface-raised: var(--paper); /* popovers, menus, modals (with a shadow) */
+  --muted: var(--neutral-100); /* subtle fills: skeletons, hovered rows */
+  --muted-fg: var(--neutral-600); /* secondary text */
+  --border: var(--neutral-200); /* dividers, card outlines */
+  --border-strong: var(--neutral-500); /* input outlines (≥ 3:1 vs bg) */
+  --ring: var(--ink); /* focus ring */
+  --overlay: rgb(10 10 10 / 0.5); /* backdrop behind modals and drawers */
+
+  --primary: var(--ink);
+  --primary-fg: var(--paper);
+  --secondary: var(--neutral-100);
+  --secondary-fg: var(--ink);
+
+  /* base = solid color, also safe as text on bg; -fg = text on -soft */
+  --success: var(--green-700);
+  --success-fg: var(--green-900);
+  --success-soft: var(--green-100);
+  --warning: var(--amber-700);
+  --warning-fg: var(--amber-900);
+  --warning-soft: var(--amber-100);
+  --danger: var(--red-600); /* also the sale color */
+  --danger-fg: var(--red-800);
+  --danger-soft: var(--red-100);
+  --info: var(--blue-600);
+  --info-fg: var(--blue-900);
+  --info-soft: var(--blue-100);
+
+  --shadow-color: 30 27 25; /* neutral-900 as r g b, used with alpha */
+  --shadow-strength: 1;
+}
+
+/* Dark: primary and secondary invert; surfaces step up in lightness. */
+[data-theme='dark'] {
+  color-scheme: dark;
+
+  --bg: var(--ink);
+  --fg: var(--neutral-50);
+  --surface: var(--neutral-950);
+  --surface-raised: var(--neutral-900);
+  --muted: var(--neutral-900);
+  --muted-fg: var(--neutral-400);
+  --border: var(--neutral-800);
+  --border-strong: var(--neutral-500);
+  --ring: var(--paper);
+  --overlay: rgb(0 0 0 / 0.7);
+
+  --primary: var(--paper);
+  --primary-fg: var(--ink);
+  --secondary: var(--neutral-800);
+  --secondary-fg: var(--neutral-50);
+
+  --success: var(--green-400);
+  --success-fg: var(--green-300);
+  --success-soft: var(--green-950);
+  --warning: var(--amber-400);
+  --warning-fg: var(--amber-300);
+  --warning-soft: var(--amber-950);
+  --danger: var(--red-400);
+  --danger-fg: var(--red-300);
+  --danger-soft: var(--red-950);
+  --info: var(--blue-400);
+  --info-fg: var(--blue-300);
+  --info-soft: var(--blue-950);
+
+  /* Shadows barely show on black; surfaces + borders do the lifting. */
+  --shadow-color: 0 0 0;
+  --shadow-strength: 2.5;
+}
+
+/* ------------------------------------------------------------------ */
+/* Layers, motion, layout (theme-independent)                          */
+/* ------------------------------------------------------------------ */
+
+:root {
+  /* z-index scale: use the z-* utilities below, never raw numbers. */
+  --z-base: 0;
+  --z-raised: 10;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-overlay: 300;
+  --z-modal: 400;
+  --z-toast: 500;
+  --z-floating: 600;
+
+  /* Motion: keep in sync with src/styles/motion.ts (tokens.test.ts checks). */
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --duration-slow: 400ms;
+  --duration-slower: 700ms;
+
+  /* Page rhythm */
+  --gutter: clamp(1rem, 0.5rem + 2.2222vw, 2.5rem); /* 16px → 40px */
+  --section: clamp(4rem, 2.6667rem + 5.9259vw, 8rem); /* 64px → 128px */
+  --section-sm: clamp(2.5rem, 1.8333rem + 2.963vw, 4.5rem); /* 40px → 72px */
+}
+
+/* ------------------------------------------------------------------ */
+/* 3. Tailwind theme                                                   */
+/* ------------------------------------------------------------------ */
+
+/*
+ * `inline` makes utilities reference the variable at the element where
+ * they're used, so values that change with data-theme always resolve to the
+ * current theme.
+ */
+@theme inline {
+  --color-*: initial;
+
+  --color-bg: var(--bg);
+  --color-fg: var(--fg);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-muted: var(--muted);
+  --color-muted-fg: var(--muted-fg);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-ring: var(--ring);
+  --color-overlay: var(--overlay);
+  --color-primary: var(--primary);
+  --color-primary-fg: var(--primary-fg);
+  --color-secondary: var(--secondary);
+  --color-secondary-fg: var(--secondary-fg);
+  --color-success: var(--success);
+  --color-success-fg: var(--success-fg);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-fg: var(--warning-fg);
+  --color-warning-soft: var(--warning-soft);
+  --color-danger: var(--danger);
+  --color-danger-fg: var(--danger-fg);
+  --color-danger-soft: var(--danger-soft);
+  --color-info: var(--info);
+  --color-info-fg: var(--info-fg);
+  --color-info-soft: var(--info-soft);
+
+  /* Fonts: the variables come from next/font in app/layout.tsx. */
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-heading), ui-serif, Georgia, serif;
+
+  /* Shadows: soft and low-contrast, suited to black & white. */
+  --shadow-xs: 0 1px 2px
+    rgb(var(--shadow-color) / calc(0.05 * var(--shadow-strength)));
+  --shadow-sm:
+    0 1px 3px rgb(var(--shadow-color) / calc(0.06 * var(--shadow-strength))),
+    0 1px 2px rgb(var(--shadow-color) / calc(0.04 * var(--shadow-strength)));
+  --shadow-md:
+    0 4px 12px -2px
+      rgb(var(--shadow-color) / calc(0.08 * var(--shadow-strength))),
+    0 2px 4px -2px
+      rgb(var(--shadow-color) / calc(0.05 * var(--shadow-strength)));
+  --shadow-lg:
+    0 12px 32px -8px
+      rgb(var(--shadow-color) / calc(0.12 * var(--shadow-strength))),
+    0 4px 8px -4px
+      rgb(var(--shadow-color) / calc(0.06 * var(--shadow-strength)));
+  --shadow-xl: 0 24px 56px -12px
+    rgb(var(--shadow-color) / calc(0.18 * var(--shadow-strength)));
+}
+
+@theme {
+  /* Fluid type scale (360px → 1440px viewport). Body never below 16px. */
+  --text-display: clamp(2.75rem, 1.5rem + 5.5556vw, 6.5rem);
+  --text-display--line-height: 1;
+  --text-display--letter-spacing: -0.03em;
+  --text-h1: clamp(2.375rem, 1.6667rem + 3.1481vw, 4.5rem);
+  --text-h1--line-height: 1.05;
+  --text-h1--letter-spacing: -0.025em;
+  --text-h2: clamp(2rem, 1.5rem + 2.2222vw, 3.5rem);
+  --text-h2--line-height: 1.1;
+  --text-h2--letter-spacing: -0.02em;
+  --text-h3: clamp(1.6875rem, 1.375rem + 1.3889vw, 2.625rem);
+  --text-h3--line-height: 1.15;
+  --text-h3--letter-spacing: -0.015em;
+  --text-h4: clamp(1.4375rem, 1.25rem + 0.8333vw, 2rem);
+  --text-h4--line-height: 1.2;
+  --text-h4--letter-spacing: -0.01em;
+  --text-h5: clamp(1.25rem, 1.1458rem + 0.463vw, 1.5625rem);
+  --text-h5--line-height: 1.3;
+  --text-h6: clamp(1.125rem, 1.0833rem + 0.1852vw, 1.25rem);
+  --text-h6--line-height: 1.35;
+  --text-body-lg: clamp(1.125rem, 1.0833rem + 0.1852vw, 1.25rem);
+  --text-body-lg--line-height: 1.6;
+  --text-body: clamp(1rem, 0.9583rem + 0.1852vw, 1.125rem);
+  --text-body--line-height: 1.6;
+  --text-small: 0.875rem;
+  --text-small--line-height: 1.5;
+  --text-caption: 0.75rem;
+  --text-caption--line-height: 1.4;
+  --text-caption--letter-spacing: 0.02em;
+
+  /* Radius: small and calm; pills use rounded-full. */
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 24px;
+
+  /* Layout widths (max-w-page, max-w-wide…) */
+  --container-narrow: 48rem; /* 768px: forms, text pages */
+  --container-page: 80rem; /* 1280px: main content */
+  --container-wide: 120rem; /* 1920px: full-bleed sections */
+
+  /* Spacing utilities: px-gutter, py-section, py-section-sm */
+  --spacing-gutter: var(--gutter);
+  --spacing-section: var(--section);
+  --spacing-section-sm: var(--section-sm);
+
+  /* Easings (ease-standard…): keep in sync with src/styles/motion.ts */
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-emphasized: cubic-bezier(0.05, 0.7, 0.1, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-exit: cubic-bezier(0.3, 0, 1, 1);
+}
+
+/* z-index utilities: z-dropdown, z-modal… */
+@utility z-base {
+  z-index: var(--z-base);
+}
+@utility z-raised {
+  z-index: var(--z-raised);
+}
+@utility z-dropdown {
+  z-index: var(--z-dropdown);
+}
+@utility z-sticky {
+  z-index: var(--z-sticky);
+}
+@utility z-overlay {
+  z-index: var(--z-overlay);
+}
+@utility z-modal {
+  z-index: var(--z-modal);
+}
+@utility z-toast {
+  z-index: var(--z-toast);
+}
+@utility z-floating {
+  z-index: var(--z-floating);
+}
+
+/* Duration utilities: duration-fast, duration-base…
+ * Also set --tw-duration so they combine with transition-* utilities
+ * (which read it) like Tailwind's own duration-150. */
+@utility duration-fast {
+  --tw-duration: var(--duration-fast);
+  transition-duration: var(--duration-fast);
+}
+@utility duration-base {
+  --tw-duration: var(--duration-base);
+  transition-duration: var(--duration-base);
+}
+@utility duration-slow {
+  --tw-duration: var(--duration-slow);
+  transition-duration: var(--duration-slow);
+}
+@utility duration-slower {
+  --tw-duration: var(--duration-slower);
+  transition-duration: var(--duration-slower);
+}
