@@ -1,4 +1,4 @@
-import Counter from '@/components/animations/Counter';
+import { CountUp } from '@/components/motion/CountUp';
 import { Button } from '@/components/ui/Button';
 import Image from 'next/image';
 
@@ -29,17 +29,29 @@ const Banner = () => {
 
         <div className="mt-4 flex items-center gap-4">
           <div className="w-full space-y-1 border-r border-fg/80 pr-6">
-            <Counter targetValue="50+" duration={1000} />
+            <CountUp
+              value={50}
+              suffix="+"
+              className="block text-xl font-semibold md:text-2xl lg:text-3xl xl:text-4xl"
+            />
             International Brands
           </div>
 
           <div className="w-full space-y-1 border-r border-fg/80 pr-6">
-            <Counter targetValue="2000+" duration={1000} />
+            <CountUp
+              value={2000}
+              suffix="+"
+              className="block text-xl font-semibold md:text-2xl lg:text-3xl xl:text-4xl"
+            />
             Quality Products
           </div>
 
           <div className="w-full space-y-1 border-fg/80 pr-6">
-            <Counter targetValue="30,000+" duration={1000} />
+            <CountUp
+              value={30000}
+              suffix="+"
+              className="block text-xl font-semibold md:text-2xl lg:text-3xl xl:text-4xl"
+            />
             Happy Customers
           </div>
         </div>

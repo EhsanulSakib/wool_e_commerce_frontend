@@ -63,11 +63,15 @@ src/
 ├─ features/       # per-feature logic: hooks, stores, API calls
 ├─ hooks/          # shared hooks
 ├─ lib/            # utilities, env validation
-├─ providers/      # theme, Redux store and smooth-scrolling providers
+├─ providers/      # theme, Redux store, Motion and smooth-scroll (Lenis) providers
 ├─ store/          # Redux: makeStore, typed hooks, slices
 ├─ styles/         # design tokens (tokens.css) and motion values (motion.ts)
 └─ types/
 ```
+
+## Animation
+
+Motion (component animations, loaded lazily through `LazyMotion`), GSAP (scroll storytelling, only on routes that use it) and Lenis (smooth wheel scrolling, desktop only) are wired to share one animation loop and respect reduced motion. Reusable components live in `src/components/motion` (`Reveal`, `Stagger`, `TextReveal`, `Parallax`, `Magnetic`, `Marquee`, `CountUp`); import each from its own file. Rules, examples and the pre-ship checklist: [docs/animation.md](docs/animation.md). Demo: `/dev/motion`.
 
 ## UI components
 
@@ -80,6 +84,10 @@ import { Button, FormField, Input, Icon } from '@/components/ui';
 - **Primitives:** `Button` (renders a Next `<Link>` with `href`), `IconButton` (`aria-label` required by its type), `Badge`, `NotificationDot`, `Spinner`, `Skeleton`, `Icon`, `VisuallyHidden`
 - **Layout:** `Container`, `Section`, `Stack`, `Divider`
 - **Forms:** `FormField` (label + hint + error, wires `id`, `aria-describedby` and `aria-invalid` into the control inside it), `Label`, `Input`, `PasswordInput`, `Textarea`, `Select`, `Checkbox`, `RadioGroup`/`Radio`, `Switch`, `QuantityStepper`
+- **Overlays:** `Modal`, `Drawer` (focus trap + restore, scroll lock incl. Lenis, rest of the page inert, Escape/backdrop close), `DropdownMenu`, `Popover`, `Tooltip` (anchored with flip, `useAnchoredPosition`), `Portal`, and toasts: `toast.success / error / info / warning()` with `<Toaster />` in the root layout
+- **Display:** `Tabs`, `Accordion`, `Carousel` (scroll-snap, swipe/drag/keys), `Rating` / `RatingInput`, `PriceTag`, `Swatch` / `SwatchGroup`, `Breadcrumbs`, `Pagination`, `Avatar`, `EmptyState`
+- **Money:** `formatPrice(amount, currency)` and `discountPercent()` in `src/lib/money.ts`; currencies are data (`{ code, symbol, decimals, locale }`), with BDT (`৳1,250`) and USD (`$49.99`) defined locally until the currency API (module 17)
+- **Hooks** (`src/hooks`): `useDisclosure`, `useFocusTrap`, `useScrollLock`, `useInertOthers`, `useClickOutside`, `useEscapeKey` (topmost layer only), `useAnchoredPosition`, `useMediaQuery`
 - **Helpers:** `cn()` in `src/lib/cn.ts` (clsx + tailwind-merge, configured for our tokens) and `variants()` in `src/lib/variants.ts` for variant/size class maps
 - Every component takes `className` for layout overrides. Colors only come from tokens.
 

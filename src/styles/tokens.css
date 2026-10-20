@@ -292,10 +292,24 @@
 
   /* Skeleton shimmer (animate-shimmer): a highlight sweeping left → right */
   --animate-shimmer: shimmer 1.6s var(--ease-standard) infinite;
+
+  /* Marquee (animate-marquee): one copy slides its own width + gap.
+     Speed comes from --marquee-duration, set by the Marquee component. */
+  --animate-marquee: marquee var(--marquee-duration, 30s) linear infinite;
 }
 
-/* Used by --animate-shimmer. Kept outside @theme so every block above stays
-   flat (parseTokens.ts reads them with a simple parser). */
+/* Used by --animate-marquee and --animate-shimmer. Kept outside @theme so
+   every block above stays flat (parseTokens.ts reads them with a simple
+   parser). */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-100% - var(--marquee-gap, 0px)));
+  }
+}
+
 @keyframes shimmer {
   from {
     transform: translateX(-100%);

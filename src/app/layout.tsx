@@ -1,9 +1,11 @@
 import type { Metadata } from 'next';
 import { Fraunces, Inter } from 'next/font/google';
 import Navbar from '@/components/shared/Navbar/Navbar';
+import { Toaster } from '@/components/ui/Toast';
 import { publicEnv } from '@/lib/env';
-import SmoothScrolling from '@/providers/SmoothScrolling';
 import StoreProvider from '@/providers/StoreProvider';
+import { MotionProvider } from '@/providers/motion-provider';
+import { SmoothScrollProvider } from '@/providers/smooth-scroll-provider';
 import ThemeProvider from '@/providers/ThemeProvider';
 import './globals.css';
 
@@ -51,10 +53,13 @@ export default function RootLayout({
       <body>
         <ThemeProvider>
           <StoreProvider>
-            <SmoothScrolling>
-              <Navbar />
-              {children}
-            </SmoothScrolling>
+            <MotionProvider>
+              <SmoothScrollProvider>
+                <Navbar />
+                {children}
+                <Toaster />
+              </SmoothScrollProvider>
+            </MotionProvider>
           </StoreProvider>
         </ThemeProvider>
       </body>

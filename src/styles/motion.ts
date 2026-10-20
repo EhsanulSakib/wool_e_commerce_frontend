@@ -38,3 +38,14 @@ export type EaseName = keyof typeof ease;
 export function cssEase(name: EaseName): string {
   return `cubic-bezier(${ease[name].join(', ')})`;
 }
+
+/**
+ * GSAP's built-in ease names closest to each token curve, so GSAP code
+ * doesn't need the CustomEase plugin. Use these in gsap.to/from.
+ */
+export const gsapEase: Record<EaseName, string> = {
+  standard: 'power2.out',
+  emphasized: 'power3.out',
+  outExpo: 'expo.out',
+  exit: 'power2.in',
+};

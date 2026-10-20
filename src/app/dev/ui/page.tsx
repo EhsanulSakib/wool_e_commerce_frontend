@@ -4,21 +4,40 @@ import {
   Heart,
   Search,
   ShoppingBag,
+  SearchX,
+  ShoppingBag as BagIcon,
   Trash2,
 } from 'lucide-react';
 import type { Metadata } from 'next';
+import { currencies } from '@/lib/money';
 import {
+  Avatar,
   Badge,
+  Breadcrumbs,
   Button,
   Divider,
+  EmptyState,
   Icon,
   IconButton,
   NotificationDot,
+  Pagination,
+  PriceTag,
+  Rating,
   Skeleton,
   Spinner,
   Stack,
+  Swatch,
   type BadgeTone,
 } from '@/components/ui';
+import {
+  AccordionDemo,
+  CarouselDemo,
+  OverlaysDemo,
+  RatingInputDemo,
+  SwatchGroupDemo,
+  TabsDemo,
+  ToastDemo,
+} from './overlay-demos';
 import {
   ControlsDemo,
   FormDemo,
@@ -67,11 +86,14 @@ function Demo({
   id,
   title,
   note,
+  single = false,
   children,
 }: {
   id: string;
   title: string;
   note?: string;
+  /** Render once (overlays live in a portal and follow the page theme). */
+  single?: boolean;
   children: React.ReactNode;
 }) {
   return (
@@ -81,7 +103,7 @@ function Demo({
       </h2>
       {note && <p className="mt-1 mb-5 text-small text-muted-fg">{note}</p>}
       <div className={note ? '' : 'mt-5'}>
-        <Panels>{children}</Panels>
+        {single ? children : <Panels>{children}</Panels>}
       </div>
     </section>
   );
@@ -106,7 +128,7 @@ export default function UiPage() {
   return (
     <>
       <header className="pb-10">
-        <p className="text-caption text-muted-fg uppercase">Module 06</p>
+        <p className="text-caption text-muted-fg uppercase">Modules 06 · 08</p>
         <h1 className="text-h1">UI components</h1>
         <p className="mt-4 max-w-prose text-body-lg text-muted-fg">
           Every primitive in <code>src/components/ui</code>, in light and dark.
@@ -358,6 +380,178 @@ export default function UiPage() {
         note="Submit empty to see errors. Each error is linked to its field with aria-describedby."
       >
         <FormDemo />
+      </Demo>
+
+      <Demo
+        id="overlays"
+        title="Modal, Drawer, DropdownMenu, Popover, Tooltip"
+        note="Rendered once: overlays live in a portal and follow the page theme. Keyboard: Tab to a trigger, Enter, Tab cycles inside a modal, Escape closes and focus returns. The page behind doesn't scroll (Lenis too)."
+        single
+      >
+        <OverlaysDemo />
+      </Demo>
+
+      <Demo
+        id="toasts"
+        title="Toast"
+        note="Max 3 on screen, the rest queue. Hover or focus the stack to pause the timers. Announced through a polite live region; usable while a modal is open."
+        single
+      >
+        <ToastDemo />
+      </Demo>
+
+      <Demo
+        id="tabs"
+        title="Tabs"
+        note="←/→ move and select, Home/End jump; the underline slides (Motion layoutId)."
+      >
+        <TabsDemo />
+      </Demo>
+
+      <Demo
+        id="accordion"
+        title="Accordion"
+        note="Height animates with the CSS grid-rows technique; closed panels are inert."
+      >
+        <AccordionDemo />
+      </Demo>
+
+      <Demo
+        id="carousel"
+        title="Carousel"
+        note="Native scroll-snap: swipe on touch, drag with the mouse, ←/→ on the focused track, buttons and dots."
+        single
+      >
+        <CarouselDemo />
+      </Demo>
+
+      <Demo
+        id="price"
+        title="PriceTag"
+        note="formatPrice() with currency data (BDT 0 decimals, USD 2). Sale = compare-at higher than price."
+      >
+        <Stack gap={4}>
+          <Row label="Regular · BDT and USD">
+            <PriceTag amount="1250.00" currency={currencies.BDT} />
+            <PriceTag amount="49.99" currency={currencies.USD} />
+          </Row>
+          <Row label="Sale (sm · md · lg)">
+            <PriceTag
+              size="sm"
+              amount={1800}
+              compareAt={2400}
+              currency={currencies.BDT}
+            />
+            <PriceTag
+              amount={1800}
+              compareAt={2400}
+              currency={currencies.BDT}
+            />
+            <PriceTag
+              size="lg"
+              amount={39.99}
+              compareAt={59.99}
+              currency={currencies.USD}
+            />
+          </Row>
+          <Row label="Sale without the badge">
+            <PriceTag
+              amount={3450}
+              compareAt={4200}
+              currency={currencies.BDT}
+              showDiscount={false}
+            />
+          </Row>
+        </Stack>
+      </Demo>
+
+      <Demo
+        id="rating"
+        title="Rating & RatingInput"
+        note="Display rounds to half stars and reads “4.5 out of 5 stars, 128 reviews”. Input is a native radio group: arrow keys change it."
+      >
+        <Stack gap={6}>
+          <Row label="Display (sm · md · lg)">
+            <Rating size="sm" value={4.5} count={128} />
+            <Rating value={3.7} count={12} />
+            <Rating size="lg" value={5} />
+            <Rating value={0} count={0} />
+          </Row>
+          <RatingInputDemo />
+        </Stack>
+      </Demo>
+
+      <Demo
+        id="swatch"
+        title="Swatch"
+        note="Sold-out colors are crossed out and announced, but stay selectable to show that color’s photos."
+      >
+        <Stack gap={6}>
+          <SwatchGroupDemo />
+          <Row label="Display only (product card)">
+            <Swatch color="#36454F" label="Charcoal" />
+            <Swatch color="#F3EBDD" label="Cream" />
+            <Swatch color="#B5895B" label="Camel" />
+            <Swatch color="#2F4A3A" label="Forest" soldOut />
+          </Row>
+        </Stack>
+      </Demo>
+
+      <Demo
+        id="navigation"
+        title="Breadcrumbs & Pagination"
+        note='Real links; the current item has aria-current="page". Shown once: each nav landmark needs a unique name.'
+        single
+      >
+        <Stack gap={6}>
+          <Breadcrumbs
+            items={[
+              { label: 'Home', href: '/' },
+              { label: 'Sweaters', href: '/dev/ui#navigation' },
+              { label: 'Merino crew neck' },
+            ]}
+          />
+          <Pagination
+            label="Pagination, short list"
+            page={1}
+            pageCount={4}
+            hrefFor={(p) => `/dev/ui?page=${p}#navigation`}
+          />
+          <Pagination
+            label="Pagination, middle page"
+            page={6}
+            pageCount={12}
+            hrefFor={(p) => `/dev/ui?page=${p}#navigation`}
+          />
+          <Pagination
+            label="Pagination, last page"
+            page={12}
+            pageCount={12}
+            hrefFor={(p) => `/dev/ui?page=${p}#navigation`}
+          />
+        </Stack>
+      </Demo>
+
+      <Demo id="avatar-empty" title="Avatar & EmptyState">
+        <Stack gap={6}>
+          <Row label="Avatar: initials fallback (sm · md · lg)">
+            <Avatar size="sm" name="Sakib Hasan" />
+            <Avatar name="Nusrat Jahan" />
+            <Avatar size="lg" name="Rafi" />
+          </Row>
+          <EmptyState
+            icon={BagIcon}
+            title="Your cart is empty"
+            description="Find something warm for the winter."
+            action={<Button href="/dev/ui">Browse the shop</Button>}
+          />
+          <EmptyState
+            as="h3"
+            icon={SearchX}
+            title="No results for “cashmere hat”"
+            description="Check the spelling or try a broader word, like “hat”."
+          />
+        </Stack>
       </Demo>
     </>
   );
