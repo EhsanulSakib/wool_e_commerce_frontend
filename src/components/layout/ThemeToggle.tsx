@@ -10,12 +10,13 @@ import { IconButton } from '@/components/ui/IconButton';
  * the server HTML is correct before JavaScript runs and there's no hydration
  * mismatch or icon flicker.
  */
-export default function ThemeSwitcher() {
+export function ThemeToggle({ className }: { className?: string }) {
   const { resolvedTheme, setTheme } = useTheme();
 
   return (
     <IconButton
       aria-label="Toggle dark mode"
+      className={className}
       onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
     >
       <Icon icon={Moon} className="dark:hidden" />

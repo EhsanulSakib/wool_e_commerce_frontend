@@ -33,7 +33,7 @@ describe('Marquee', () => {
   it('hides the duplicate copy from screen readers and keyboard', () => {
     render(
       <Marquee>
-        <a href="/shop">Shop</a>
+        <a href="#shop">Shop</a>
       </Marquee>,
     );
     const links = screen.getAllByRole('link', { hidden: true });

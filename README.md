@@ -52,17 +52,17 @@ npm run dev                  # http://localhost:3000
 
 ```
 src/
-├─ app/            # routes, layouts, global styles
+├─ app/            # routes: (shop) group (storefront layout, page transition, error, loading), not-found, error, global-error, dev/
 ├─ components/
 │  ├─ ui/          # design-system components (module 06+)
 │  ├─ motion/      # animation components (module 07)
-│  ├─ layout/      # navbar, footer, floating buttons (module 09)
+│  ├─ layout/      # storefront shell: announcement bar, navbar + mega menu, mobile menu, search, cart drawer, footer, floating buttons
 │  ├─ product/     # product card, gallery… (modules 10, 22, 23)
 │  ├─ cart/        # cart drawer and lines (module 30)
 │  └─ …            # current components, rebuilt in milestone 02
 ├─ features/       # per-feature logic: hooks, stores, API calls
 ├─ hooks/          # shared hooks
-├─ lib/            # utilities, env validation
+├─ lib/            # utilities, env validation, money, site-config (navigation, contact, social)
 ├─ providers/      # theme, Redux store, Motion and smooth-scroll (Lenis) providers
 ├─ store/          # Redux: makeStore, typed hooks, slices
 ├─ styles/         # design tokens (tokens.css) and motion values (motion.ts)
@@ -72,6 +72,10 @@ src/
 ## Animation
 
 Motion (component animations, loaded lazily through `LazyMotion`), GSAP (scroll storytelling, only on routes that use it) and Lenis (smooth wheel scrolling, desktop only) are wired to share one animation loop and respect reduced motion. Reusable components live in `src/components/motion` (`Reveal`, `Stagger`, `TextReveal`, `Parallax`, `Magnetic`, `Marquee`, `CountUp`); import each from its own file. Rules, examples and the pre-ship checklist: [docs/animation.md](docs/animation.md). Demo: `/dev/motion`.
+
+## Storefront shell
+
+Every page in `app/(shop)` gets `ShopShell` (`src/components/layout`): skip link, announcement bar (dismissal remembered in a cookie, applied by a pre-paint script so pages stay static), sticky navbar that hides on scroll down (data attributes, no re-render per scroll), Shop mega menu, mobile menu / search / cart drawers (loaded on first open), footer and floating buttons (scroll-to-top with progress ring, contact: WhatsApp / Messenger / call). Page transitions use React's `<ViewTransition>` in `app/(shop)/template.tsx`. Store content (navigation, categories, contact numbers, social links) lives in `src/lib/site-config.ts`; replace the placeholder phone numbers and handles there.
 
 ## UI components
 

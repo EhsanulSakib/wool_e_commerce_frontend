@@ -23,6 +23,8 @@ function lock() {
   html.style.setProperty('--scrollbar-compensation', `${scrollbar}px`);
   body.style.paddingRight = `${scrollbar}px`;
   html.style.overflow = 'hidden';
+  // Lets fixed UI react, e.g. floating buttons hide behind an open drawer.
+  html.dataset.scrollLocked = '';
 }
 
 function unlock() {
@@ -32,6 +34,7 @@ function unlock() {
   html.style.removeProperty('--scrollbar-compensation');
   body.style.paddingRight = '';
   html.style.overflow = '';
+  delete html.dataset.scrollLocked;
 }
 
 export function useScrollLock(active: boolean) {

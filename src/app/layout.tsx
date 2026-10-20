@@ -1,6 +1,6 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Fraunces, Inter } from 'next/font/google';
-import Navbar from '@/components/shared/Navbar/Navbar';
+import { announcementScript } from '@/components/layout/AnnouncementBar';
 import { Toaster } from '@/components/ui/Toast';
 import { publicEnv } from '@/lib/env';
 import StoreProvider from '@/providers/StoreProvider';
@@ -37,6 +37,16 @@ export const metadata: Metadata = {
     'Sweaters, cardigans, scarves and beanies made from soft, natural wool. Cash on Delivery across Bangladesh, shipping worldwide.',
 };
 
+export const viewport: Viewport = {
+  // Lets the page extend under the phone's notch/home indicator; fixed UI
+  // (floating buttons) uses env(safe-area-inset-*) to stay clear of them.
+  viewportFit: 'cover',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#0a0a0a' },
+  ],
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -50,12 +60,18 @@ export default function RootLayout({
       className={`${heading.variable} ${body.variable}`}
       suppressHydrationWarning
     >
-      <body>
+      <head>
+        {/* Runs before first paint: hides a dismissed announcement bar. */}
+        <script dangerouslySetInnerHTML={{ __html: announcementScript }} />
+      </head>
+      {/* suppressHydrationWarning: browser extensions (Grammarly, ColorZilla…)
+          add attributes to <body> before React hydrates. Only affects this
+          element's own attributes. */}
+      <body suppressHydrationWarning>
         <ThemeProvider>
           <StoreProvider>
             <MotionProvider>
               <SmoothScrollProvider>
-                <Navbar />
                 {children}
                 <Toaster />
               </SmoothScrollProvider>

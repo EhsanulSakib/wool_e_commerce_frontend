@@ -3,6 +3,7 @@ import { makeStore } from '../store';
 import {
   closeAllOverlays,
   openCartDrawer,
+  setCurrency,
   selectIsCartDrawerOpen,
   selectIsMobileMenuOpen,
   toggleMobileMenu,
@@ -18,6 +19,7 @@ describe('uiSlice', () => {
       isCartDrawerOpen: false,
       isMobileMenuOpen: false,
       isSearchOpen: false,
+      currency: 'BDT',
     });
   });
 
@@ -31,10 +33,11 @@ describe('uiSlice', () => {
     expect(selectIsMobileMenuOpen(store.getState())).toBe(true);
   });
 
-  it('closeAllOverlays closes everything', () => {
+  it('closeAllOverlays closes everything but keeps the currency', () => {
     const store = makeStore();
     store.dispatch(openCartDrawer());
     store.dispatch(toggleSearch());
+    store.dispatch(setCurrency('USD'));
 
     store.dispatch(closeAllOverlays());
 
@@ -42,6 +45,7 @@ describe('uiSlice', () => {
       isCartDrawerOpen: false,
       isMobileMenuOpen: false,
       isSearchOpen: false,
+      currency: 'USD',
     });
   });
 

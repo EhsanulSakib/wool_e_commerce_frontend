@@ -2,17 +2,17 @@ import ThemeProvider from '@/providers/ThemeProvider';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it } from 'vitest';
-import ThemeSwitcher from './ThemeSwitcher';
+import { ThemeToggle } from './ThemeToggle';
 
 function renderSwitcher() {
   return render(
     <ThemeProvider>
-      <ThemeSwitcher />
+      <ThemeToggle />
     </ThemeProvider>,
   );
 }
 
-describe('ThemeSwitcher', () => {
+describe('ThemeToggle', () => {
   beforeEach(() => {
     localStorage.clear();
     document.documentElement.removeAttribute('data-theme');

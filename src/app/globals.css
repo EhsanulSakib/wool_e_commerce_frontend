@@ -98,3 +98,55 @@
     scroll-behavior: auto !important;
   }
 }
+
+/*
+ * Page transitions (React <ViewTransition> in app/(shop)/template.tsx).
+ * Old page leaves fast; the new one fades in and rises slightly after it.
+ * Only transform/opacity; skipped entirely with reduced motion.
+ */
+::view-transition-old(.page-exit) {
+  animation: var(--duration-fast) var(--ease-exit) both vt-fade reverse;
+}
+::view-transition-new(.page-enter) {
+  animation:
+    var(--duration-base) var(--ease-standard) var(--duration-fast) both vt-fade,
+    var(--duration-slow) var(--ease-emphasized) var(--duration-fast) both
+      vt-rise;
+}
+
+@keyframes vt-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes vt-rise {
+  from {
+    translate: 0 12px;
+  }
+  to {
+    translate: 0 0;
+  }
+}
+
+/* Gentle bob for decorative elements (the 404). */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}

@@ -4,7 +4,7 @@ import { Overlay, type OverlayBaseProps } from './Overlay';
 
 /*
  * Panel that slides in from an edge: cart (right), mobile menu (left),
- * mobile filters (bottom). Same focus, scroll and Escape behavior as Modal.
+ * search (top), mobile filters (bottom). Same focus, scroll and Escape behavior as Modal.
  *
  *   <Drawer side="right" open={cart.open} onClose={cart.onClose} title="Your cart">…</Drawer>
  */
@@ -19,6 +19,11 @@ const layouts = {
     layer: 'justify-start',
     panel: 'h-dvh w-[min(100vw-3rem,24rem)]',
     hidden: { x: '-100%' },
+  },
+  top: {
+    layer: 'items-start',
+    panel: 'max-h-[85dvh] w-full rounded-b-2xl',
+    hidden: { y: '-100%' },
   },
   bottom: {
     layer: 'items-end',
