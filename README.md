@@ -37,8 +37,9 @@ npm run dev                  # http://localhost:3000
 `next-themes` sets `data-theme="light" | "dark"` on `<html>` before the page paints (no flash) and remembers the choice. All colors, type, spacing, radius, shadows, z-index and motion values are tokens in `src/styles/tokens.css`. Semantic color tokens change with the theme, so components use the same classes in both themes (`bg-bg`, `text-fg`, `text-muted-fg`, `border-border`…) and **never check the theme in JavaScript**. Tailwind's default color palette is turned off, so only token colors exist.
 
 - Full reference: [docs/design-tokens.md](docs/design-tokens.md)
-- Live preview: `/dev/tokens` (both themes, contrast ratios) and `/dev/fonts` (font pairings); both noindex
+- Live preview: `/dev/tokens` (both themes, contrast ratios), `/dev/fonts` (font pairings) and `/dev/ui` (every component); noindex, and 404 in production builds unless `ENABLE_DEV_PAGES=true`
 - Fonts: Fraunces (headings, `font-display`) + Inter (body, `font-sans`) via `next/font`
+- Icons: `lucide-react` only, through the `Icon` wrapper in `src/components/ui`
 - Motion values for JS animations: `src/styles/motion.ts` (kept in sync with the CSS by a test)
 
 ## State and data
@@ -68,10 +69,25 @@ src/
 └─ types/
 ```
 
+## UI components
+
+`src/components/ui` holds the custom design system (no UI library). Import from the barrel:
+
+```tsx
+import { Button, FormField, Input, Icon } from '@/components/ui';
+```
+
+- **Primitives:** `Button` (renders a Next `<Link>` with `href`), `IconButton` (`aria-label` required by its type), `Badge`, `NotificationDot`, `Spinner`, `Skeleton`, `Icon`, `VisuallyHidden`
+- **Layout:** `Container`, `Section`, `Stack`, `Divider`
+- **Forms:** `FormField` (label + hint + error, wires `id`, `aria-describedby` and `aria-invalid` into the control inside it), `Label`, `Input`, `PasswordInput`, `Textarea`, `Select`, `Checkbox`, `RadioGroup`/`Radio`, `Switch`, `QuantityStepper`
+- **Helpers:** `cn()` in `src/lib/cn.ts` (clsx + tailwind-merge, configured for our tokens) and `variants()` in `src/lib/variants.ts` for variant/size class maps
+- Every component takes `className` for layout overrides. Colors only come from tokens.
+
 ## Environment variables
 
-| Variable               | Description                                         |
-| ---------------------- | --------------------------------------------------- |
-| `NEXT_PUBLIC_SITE_URL` | Canonical site URL, default `http://localhost:3000` |
+| Variable               | Description                                                            |
+| ---------------------- | ---------------------------------------------------------------------- |
+| `NEXT_PUBLIC_SITE_URL` | Canonical site URL, default `http://localhost:3000`                    |
+| `ENABLE_DEV_PAGES`     | Server-only. `true` at build time keeps `/dev/*` in a production build |
 
 Public variables are validated in `src/lib/env.ts` and end up in the browser bundle, so they must never contain secrets.

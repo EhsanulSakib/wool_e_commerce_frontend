@@ -189,7 +189,9 @@ gsap.to(el, {
 });
 ```
 
-**Reduced motion:** with `prefers-reduced-motion: reduce`, a global rule in `globals.css` makes every CSS transition and animation near-instant. JS animations (Motion, GSAP) must check it themselves (module 07).
+**Reduced motion:** with `prefers-reduced-motion: reduce`, a global rule in `globals.css` makes every CSS transition and animation near-instant. JS animations (Motion, GSAP) must check it themselves (module 07). Exception: elements with `data-essential-motion` (the `Spinner`) keep animating, because a frozen spinner looks like a hang.
+
+**Shimmer:** `animate-shimmer` (1.6s, `ease-standard`, infinite) sweeps a highlight across `Skeleton`. It animates `transform` only and stops with reduced motion.
 
 ## Details
 

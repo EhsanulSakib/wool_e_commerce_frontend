@@ -3,14 +3,17 @@ import { useNavbar } from '@/hooks/useNavbar';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
-  FiChevronDown,
-  FiChevronUp,
-  FiHeart,
-  FiMenu,
-  FiSearch,
-  FiShoppingCart,
-  FiX,
-} from 'react-icons/fi';
+  ChevronDown,
+  ChevronUp,
+  Heart,
+  Menu,
+  Search,
+  ShoppingBag,
+  X,
+} from 'lucide-react';
+import { Button } from '@/components/ui/Button';
+import { Icon } from '@/components/ui/Icon';
+import { NotificationDot } from '@/components/ui/NotificationDot';
 import ThemeSwitcher from '../Button/ThemeSwitcher';
 import { navLinks } from './navLinks';
 
@@ -38,7 +41,7 @@ export default function Navbar() {
   } = useNavbar();
 
   return (
-    <div className="py-1 shadow-sm">
+    <header className="py-1 shadow-sm">
       <div className="mx-auto flex items-center justify-between px-4">
         {/* Hamburger Menu (sm, md) */}
         <button
@@ -46,7 +49,7 @@ export default function Navbar() {
           onClick={toggleMenu}
           aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
         >
-          {isMenuOpen ? <FiX /> : <FiMenu />}
+          <Icon icon={isMenuOpen ? X : Menu} size="lg" />
         </button>
 
         {/* Logo: both variants are rendered, CSS shows the one for the theme */}
@@ -96,7 +99,7 @@ export default function Navbar() {
                         aria-expanded={!!openDropdowns[index]}
                       >
                         {item.title}
-                        <FiChevronDown className="text-lg" aria-hidden="true" />
+                        <Icon icon={ChevronDown} size="sm" />
                       </button>
                       <div
                         className={`absolute top-full left-1/2 mt-1 w-64 -translate-x-1/2 transform rounded-lg border border-fg/10 bg-bg shadow-lg transition-all duration-300 ease-in-out ${
@@ -145,7 +148,7 @@ export default function Navbar() {
               onClick={toggleSearch}
               aria-label={isSearchExpanded ? 'Close search' : 'Open search'}
             >
-              <FiSearch />
+              <Icon icon={Search} />
             </button>
             <div
               className={`${
@@ -153,9 +156,10 @@ export default function Navbar() {
               } transition-all duration-300 ease-in-out lg:block`}
             >
               <div className="relative">
-                <FiSearch
-                  className="absolute top-1/2 left-3 -translate-y-1/2 transform text-fg/70"
-                  aria-hidden="true"
+                <Icon
+                  icon={Search}
+                  size="sm"
+                  className="absolute top-1/2 left-3 -translate-y-1/2 transform text-muted-fg"
                 />
                 <input
                   type="search"
@@ -178,7 +182,7 @@ export default function Navbar() {
             aria-label="Favorites"
             aria-current={isActiveLink('/favorites') ? 'page' : undefined}
           >
-            <FiHeart fill="currentColor" aria-hidden="true" />
+            <Icon icon={Heart} size="lg" />
           </Link>
 
           {/* Cart */}
@@ -187,28 +191,22 @@ export default function Navbar() {
             onClick={toggleCart}
             aria-label="Open cart, 3 items"
           >
-            <FiShoppingCart aria-hidden="true" />
-            <span className="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-danger text-caption text-bg">
-              3
-            </span>
+            <Icon icon={ShoppingBag} size="lg" />
+            <NotificationDot count={3} className="absolute -top-1.5 -right-2" />
           </button>
 
           {/* Theme Toggle */}
           <ThemeSwitcher />
 
           {/* Signup */}
-          <Link
+          <Button
             href="/signup"
             prefetch={false}
-            className={`rounded-lg px-4 py-2 text-lg transition-all duration-300 ${
-              isActiveLink('/signup')
-                ? 'bg-fg text-bg'
-                : 'bg-fg/90 text-bg hover:bg-fg'
-            }`}
+            size="sm"
             aria-current={isActiveLink('/signup') ? 'page' : undefined}
           >
             Signup
-          </Link>
+          </Button>
         </div>
       </div>
 
@@ -243,9 +241,9 @@ export default function Navbar() {
                   {item.items && (
                     <span className="ml-2" aria-hidden="true">
                       {isDropdownOpen ? (
-                        <FiChevronUp className="text-lg" />
+                        <Icon icon={ChevronUp} size="sm" />
                       ) : (
-                        <FiChevronDown className="text-lg" />
+                        <Icon icon={ChevronDown} size="sm" />
                       )}
                     </span>
                   )}
@@ -304,7 +302,7 @@ export default function Navbar() {
               className="text-2xl"
               aria-label="Close cart"
             >
-              <FiX />
+              <Icon icon={X} size="lg" />
             </button>
           </div>
           <div className="flex flex-col gap-4">
@@ -320,9 +318,9 @@ export default function Navbar() {
                 </div>
               </div>
             ))}
-            <button className="mt-4 rounded-lg bg-fg px-4 py-2 text-bg hover:bg-fg/90">
+            <Button className="mt-4" fullWidth>
               Checkout
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -333,6 +331,6 @@ export default function Navbar() {
           onClick={toggleCart}
         />
       )}
-    </div>
+    </header>
   );
 }

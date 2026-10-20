@@ -1,7 +1,9 @@
 'use client';
 
+import { Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import { MdDarkMode, MdLightMode } from 'react-icons/md';
+import { Icon } from '@/components/ui/Icon';
+import { IconButton } from '@/components/ui/IconButton';
 
 /**
  * Both icons are rendered and CSS shows the right one (`dark:` variant), so
@@ -12,14 +14,12 @@ export default function ThemeSwitcher() {
   const { resolvedTheme, setTheme } = useTheme();
 
   return (
-    <button
-      type="button"
-      onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
-      className="cursor-pointer text-2xl transition-colors duration-200"
+    <IconButton
       aria-label="Toggle dark mode"
+      onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
     >
-      <MdDarkMode className="dark:hidden" aria-hidden="true" />
-      <MdLightMode className="hidden dark:block" aria-hidden="true" />
-    </button>
+      <Icon icon={Moon} className="dark:hidden" />
+      <Icon icon={Sun} className="hidden dark:block" />
+    </IconButton>
   );
 }

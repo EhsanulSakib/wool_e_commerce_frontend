@@ -83,11 +83,15 @@
   }
 }
 
-/* Reduced motion: CSS transitions and animations become near-instant. */
+/*
+ * Reduced motion: CSS transitions and animations become near-instant.
+ * Exception: [data-essential-motion] (spinners), where the motion IS the
+ * information ("still working"); a frozen spinner looks like a hang.
+ */
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
+  *:not([data-essential-motion]),
+  *:not([data-essential-motion])::before,
+  *:not([data-essential-motion])::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;

@@ -1,5 +1,5 @@
 import Counter from '@/components/animations/Counter';
-import PrimaryButton from '@/components/shared/Button/PrimaryButton';
+import { Button } from '@/components/ui/Button';
 import Image from 'next/image';
 
 /*
@@ -18,12 +18,14 @@ const Banner = () => {
           style.
         </p>
 
-        <PrimaryButton
-          title="Shop Now"
-          type="button"
+        <Button
           href="/products"
-          style="mt-4 lg:mt-8 w-44 rounded-full cursor-pointer"
-        />
+          prefetch={false}
+          size="lg"
+          className="mt-6 lg:mt-8"
+        >
+          Shop Now
+        </Button>
 
         <div className="mt-4 flex items-center gap-4">
           <div className="w-full space-y-1 border-r border-fg/80 pr-6">

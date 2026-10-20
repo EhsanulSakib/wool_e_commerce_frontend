@@ -289,6 +289,20 @@
   --ease-emphasized: cubic-bezier(0.05, 0.7, 0.1, 1);
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-exit: cubic-bezier(0.3, 0, 1, 1);
+
+  /* Skeleton shimmer (animate-shimmer): a highlight sweeping left → right */
+  --animate-shimmer: shimmer 1.6s var(--ease-standard) infinite;
+}
+
+/* Used by --animate-shimmer. Kept outside @theme so every block above stays
+   flat (parseTokens.ts reads them with a simple parser). */
+@keyframes shimmer {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
 }
 
 /* z-index utilities: z-dropdown, z-modal… */
